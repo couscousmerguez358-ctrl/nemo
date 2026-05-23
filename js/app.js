@@ -592,6 +592,35 @@
         body.innerHTML = '<div class="terminal__line terminal__line--sys">Terminal vidé.</div>';
         return;
       }
+
+      // Screenshot — capture réelle de la page
+      if (cmd === 'screenshot') {
+        addLine('📸 Capture en cours...', 'info');
+        setTimeout(() => {
+          if (typeof html2canvas !== 'undefined') {
+            html2canvas(document.body, {
+              backgroundColor: '#020b18',
+              scale: 2,
+              useCORS: true,
+              logging: false,
+            }).then(canvas => {
+              const now = new Date();
+              const filename = `nemo_screenshot_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}h${String(now.getMinutes()).padStart(2,'0')}.png`;
+              const link = document.createElement('a');
+              link.download = filename;
+              link.href = canvas.toDataURL('image/png');
+              link.click();
+              addLine(`✓ Capture sauvegardée → ${filename}`, 'result');
+            }).catch(() => {
+              addLine('✗ Erreur lors de la capture.', 'error');
+            });
+          } else {
+            addLine('✗ Module de capture non chargé.', 'error');
+          }
+        }, 300);
+        return;
+      }
+
       const match = COMMANDS[cmd];
       if (match) {
         const text = typeof match.text === 'function' ? match.text() : match.text;
