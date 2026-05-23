@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEMO — Neuro-Enhanced Machine Operator. Assistant vocal PC nouvelle génération pour Windows.">
+  <title>NEMO — Assistant Vocal PC Intelligent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Aquatic background effects -->
+  <div class="hero-orb" aria-hidden="true"></div>
+  <canvas id="bubbles" aria-hidden="true"></canvas>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__brand">Nemo.</a>
+      <div class="nav__links" id="navLinks">
+        <a href="#features" class="nav__link">Fonctionnalités</a>
+        <a href="#modules" class="nav__link">Modules</a>
+        <a href="#stats" class="nav__link">Pourquoi NEMO</a>
+        <a href="#terminal" class="nav__link">Démo</a>
+      </div>
+      <div class="nav__actions">
+        <a href="#terminal" class="btn btn--outline-sm">Essayer la démo</a>
+        <a href="#about" class="btn btn--primary-sm">Découvrir</a>
+      </div>
+      <button class="nav__burger" id="navBurger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero" id="hero">
+    <div class="wrap">
+      <h1 class="hero__title">
+        Contrôlez votre PC.<br>
+        <span class="hero__title--accent">Par la voix.</span>
+      </h1>
+      <p class="hero__sub">
+        NEMO est un assistant vocal de nouvelle génération pour Windows. 
+        Des commandes système à la domotique, il exécute tout ce que vous dites — instantanément.
+      </p>
+      <div class="hero__btns">
+        <a href="#about" class="btn btn--primary">Découvrir NEMO</a>
+        <a href="#terminal" class="btn btn--outline">Voir la démo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trust bar -->
+  <section class="trust" id="trust">
+    <div class="wrap">
+      <div class="trust__bar">
+        <div class="trust__item">
+          <div class="trust__icon-wrap">⚡</div>
+          <div>
+            <span class="trust__title">Instantané</span>
+            <span class="trust__label">Exécution en temps réel</span>
+          </div>
+        </div>
+        <div class="trust__sep"></div>
+        <div class="trust__item">
+          <div class="trust__icon-wrap">🎙️</div>
+          <div>
+            <span class="trust__title">Vocal</span>
+            <span class="trust__label">Commande en langage naturel</span>
+          </div>
+        </div>
+        <div class="trust__sep"></div>
+        <div class="trust__item">
+          <div class="trust__icon-wrap">🔒</div>
+          <div>
+            <span class="trust__title">Sécurisé</span>
+            <span class="trust__label">4 niveaux de confirmation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="wrap wrap--narrow">
+      <p class="section-tag">À propos</p>
+      <h2 class="section-title">Votre assistant vocal. <span class="accent">Votre PC.</span></h2>
+      <p class="section-desc">
+        <strong>NEMO</strong> <em>(Neuro-Enhanced Machine Operator)</em> est un assistant vocal PC de nouvelle génération conçu pour Windows 10 et 11. Il transforme votre ordinateur en un environnement intelligent et réactif, capable de comprendre vos commandes vocales en langage naturel — même imprécises ou familières — pour exécuter instantanément plus de 200 actions système réparties en 16 modules spécialisés : gestion des fichiers, optimisation système, contrôle réseau, multimédia, développement, domotique, sécurité, et bien plus. Doté de 8 modes cognitifs adaptatifs, NEMO ajuste son comportement, son niveau de détail et son interface en temps réel selon votre contexte et vos besoins. Il apprend vos habitudes, mémorise vos préférences, anticipe vos intentions, et enchaîne automatiquement des séquences de commandes complexes — le tout avec un système de sécurité à 4 niveaux et une fiabilité absolue.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features (services grid) -->
+  <section class="features" id="features">
+    <div class="wrap">
+      <p class="section-tag">Fonctionnalités</p>
+      <h2 class="section-title">Tout ce dont votre PC a besoin. <span class="accent">Rien de plus.</span></h2>
+      <p class="section-sub">Des commandes vocales intelligentes aux automatisations système, NEMO couvre l'intégralité de votre expérience Windows.</p>
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon"><span>🎙️</span></div>
+          <h3 class="feature-card__title">Commande Vocale</h3>
+          <p class="feature-card__desc">Parlez naturellement, même avec des fautes ou du bruit. NEMO comprend votre intention et agit instantanément.</p>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-card__icon"><span>🧠</span></div>
+          <h3 class="feature-card__title">Intelligence Cognitive</h3>
+          <p class="feature-card__desc">8 modes adaptatifs — Rapide, Expert, Nuit, Focus… NEMO s'ajuste à votre contexte en temps réel.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon"><span>⚡</span></div>
+          <h3 class="feature-card__title">Exécution Système</h3>
+          <p class="feature-card__desc">PowerShell, Python, CMD, WSL — NEMO pilote tous les moteurs d'exécution de Windows nativement.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon"><span>🔗</span></div>
+          <h3 class="feature-card__title">Chaînage de Commandes</h3>
+          <p class="feature-card__desc">"Compresse, renomme avec la date, et envoie sur le Cloud" — une phrase, trois actions enchaînées.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon"><span>📚</span></div>
+          <h3 class="feature-card__title">Apprentissage Continu</h3>
+          <p class="feature-card__desc">NEMO retient vos préférences, raccourcis et routines entre les sessions. Il s'adapte à vous.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon"><span>🛡️</span></div>
+          <h3 class="feature-card__title">Sécurité Avancée</h3>
+          <p class="feature-card__desc">4 niveaux de confirmation, liste noire système, journal d'audit complet. Rien ne passe sans votre accord.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats" id="stats">
+    <div class="wrap">
+      <p class="section-tag">Pourquoi NEMO</p>
+      <h2 class="section-title">Conçu pour la fiabilité. <span class="accent">Pensé pour vous.</span></h2>
+      <p class="section-sub">Chaque aspect de NEMO est optimisé pour une expérience sans friction.</p>
+      <div class="stats__grid">
+        <div class="stat-card">
+          <span class="stat-card__num">01</span>
+          <h3 class="stat-card__title">16 Modules<br>Spécialisés</h3>
+          <p class="stat-card__desc">Système, fichiers, réseau, audio, média, dev, sécurité, domotique et plus.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__num">02</span>
+          <h3 class="stat-card__title">Interprétation<br>Vocale Intelligente</h3>
+          <p class="stat-card__desc">Tolérance aux fautes, accents, bruit de fond et commandes incomplètes.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__num">03</span>
+          <h3 class="stat-card__title">Profils<br>Personnalisés</h3>
+          <p class="stat-card__desc">Raccourcis vocaux, routines, préférences — tout est sauvegardé et exportable.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__num">04</span>
+          <h3 class="stat-card__title">Tâches Planifiées<br>& Conditionnelles</h3>
+          <p class="stat-card__desc">Programmez des actions par heure, événement système ou condition réseau.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modules -->
+  <section class="modules" id="modules">
+    <div class="wrap">
+      <p class="section-tag">Modules</p>
+      <h2 class="section-title">16 modules. <span class="accent">Contrôle total.</span></h2>
+      <p class="section-sub">Chaque module couvre un domaine complet de votre PC.</p>
+      <div class="modules__grid" id="modulesGrid"></div>
+    </div>
+  </section>
+
+  <!-- Terminal -->
+  <section class="terminal-section" id="terminal">
+    <div class="wrap wrap--narrow">
+      <p class="section-tag">Démo Interactive</p>
+      <h2 class="section-title">Essayez NEMO. <span class="accent">Maintenant.</span></h2>
+      <p class="section-sub">Tapez une commande ci-dessous — <strong>aide</strong>, <strong>heure</strong>, <strong>cpu</strong>, <strong>ram</strong>, <strong>météo</strong>, <strong>modules</strong>…</p>
+      <div class="terminal">
+        <div class="terminal__bar">
+          <div class="terminal__dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="terminal__title">NEMO v2.0 — Terminal</span>
+        </div>
+        <div class="terminal__body" id="terminalBody">
+          <div class="terminal__line terminal__line--sys">NEMO v2.0 initialisé — Prêt à recevoir vos commandes.</div>
+        </div>
+        <div class="terminal__input-row">
+          <span class="terminal__prompt">❯</span>
+          <input type="text" class="terminal__input" id="terminalInput" placeholder="Tapez une commande…" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modes -->
+  <section class="modes" id="modes">
+    <div class="wrap">
+      <p class="section-tag">Modes Cognitifs</p>
+      <h2 class="section-title">Un mode pour chaque <span class="accent">situation.</span></h2>
+      <div class="modes__grid" id="modesGrid"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <span class="footer__logo">Nemo.</span>
+          <p class="footer__tagline">Neuro-Enhanced Machine Operator<br>Assistant vocal PC — Windows 10/11</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Navigation</h4>
+            <a href="#about">À propos</a>
+            <a href="#features">Fonctionnalités</a>
+            <a href="#modules">Modules</a>
+          </div>
+          <div class="footer__col">
+            <h4>Ressources</h4>
+            <a href="#terminal">Démo</a>
+            <a href="#modes">Modes</a>
+            <a href="#stats">Pourquoi NEMO</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
