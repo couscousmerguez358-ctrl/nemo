@@ -525,7 +525,7 @@
         }
         ctx.beginPath();
         ctx.arc(x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34, 211, 238, ${b.alpha})`;
+        ctx.fillStyle = `rgba(0, 123, 255, ${b.alpha})`;
         ctx.fill();
         if (b.r > 1.5) {
           ctx.beginPath();
