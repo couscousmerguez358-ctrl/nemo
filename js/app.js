@@ -593,25 +593,39 @@
         return;
       }
 
-      // Screenshot — capture réelle de la page
+      // Screenshot — capture pleine page
       if (cmd === 'screenshot') {
-        addLine('📸 Capture en cours...', 'info');
+        addLine('📸 Capture pleine page en cours...', 'info');
         setTimeout(() => {
           if (typeof html2canvas !== 'undefined') {
+            // Scroll to top for full capture
+            const prevScroll = window.scrollY;
+            window.scrollTo(0, 0);
+
             html2canvas(document.body, {
-              backgroundColor: '#020b18',
+              backgroundColor: null,
               scale: 2,
               useCORS: true,
               logging: false,
+              width: document.documentElement.scrollWidth,
+              height: document.documentElement.scrollHeight,
+              windowWidth: document.documentElement.scrollWidth,
+              windowHeight: document.documentElement.scrollHeight,
+              x: 0,
+              y: 0,
             }).then(canvas => {
+              // Restore scroll position
+              window.scrollTo(0, prevScroll);
+
               const now = new Date();
               const filename = `nemo_screenshot_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}h${String(now.getMinutes()).padStart(2,'0')}.png`;
               const link = document.createElement('a');
               link.download = filename;
               link.href = canvas.toDataURL('image/png');
               link.click();
-              addLine(`✓ Capture sauvegardée → ${filename}`, 'result');
+              addLine(`✓ Capture pleine page sauvegardée → ${filename}`, 'result');
             }).catch(() => {
+              window.scrollTo(0, prevScroll);
               addLine('✗ Erreur lors de la capture.', 'error');
             });
           } else {
