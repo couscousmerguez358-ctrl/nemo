@@ -493,13 +493,13 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
 }
 
 .feature-card--highlight {
-  background: rgba(0, 123, 255, 0.08);
-  border-color: var(--border-accent);
+  background: var(--bg-card);
+  border-color: var(--border);
 }
 
 .feature-card--highlight:hover {
-  background: rgba(0, 123, 255, 0.14);
-  border-color: var(--aqua);
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
 }
 
 .feature-card__icon {
