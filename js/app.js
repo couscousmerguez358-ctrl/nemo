@@ -75,10 +75,10 @@
 
     // ── Catégorie : Fichiers ──────────────────────
     'fichiers': { type: 'result', text: 'Commandes fichiers : ls, rechercher, doublons, taille, zip, unzip, chiffrer, dechiffrer, corbeille, récent' },
-    'ls':      { type: 'result', text: 'C:\\Users\\neima\\Desktop — 📁 Projets (12 fichiers) | 📁 Documents (34) | 📁 Téléchargements (8) | 📄 notes.txt (2 Ko)' },
+    'ls':      { type: 'result', text: 'C:\\Users\\%USERNAME%\\Desktop — 📁 Projets (12 fichiers) | 📁 Documents (34) | 📁 Téléchargements (8) | 📄 notes.txt (2 Ko)' },
     'rechercher': { type: 'result', text: '🔍 Tapez "rechercher [nom]" — Recherche rapide dans tous les dossiers avec indexation Windows Search.' },
     'doublons': { type: 'result', text: () => `✓ Scan terminé — ${Math.floor(5 + Math.random() * 20)} doublons trouvés — ${(0.5 + Math.random() * 3).toFixed(1)} Go récupérables.` },
-    'taille':  { type: 'result', text: 'C:\\Users\\neima — 📁 AppData: 18.4 Go | 📁 Documents: 5.2 Go | 📁 Téléchargements: 12.7 Go | 📁 Bureau: 1.1 Go' },
+    'taille':  { type: 'result', text: 'C:\\Users\\%USERNAME% — 📁 AppData: 18.4 Go | 📁 Documents: 5.2 Go | 📁 Téléchargements: 12.7 Go | 📁 Bureau: 1.1 Go' },
     'zip':     { type: 'result', text: '✓ Compression disponible — Formats supportés : ZIP, 7Z, RAR, TAR.GZ — Chiffrement AES-256 disponible.' },
     'corbeille': { type: 'result', text: () => `🗑️ Corbeille : ${Math.floor(3 + Math.random() * 15)} éléments — ${(0.2 + Math.random() * 2).toFixed(1)} Go — Tapez "vider corbeille" pour supprimer.` },
     'récent':  { type: 'result', text: () => `📄 Derniers fichiers : rapport.docx (${Math.floor(1 + Math.random() * 30)} min), screenshot.png (2h), projet_v3.zip (hier)` },
@@ -132,7 +132,7 @@
 
     // ── Catégorie : Média ─────────────────────────
     'média':   { type: 'result', text: 'Commandes média : screenshot, screenrec, ocr, convertir, transcrire, photo' },
-    'screenshot': { type: 'result', text: '📸 Simulation — Capture d\'écran sauvegardée → C:\\Users\\neima\\Pictures\\Screenshots\\capture_2026-05-23.png' },
+    'screenshot': { type: 'result', text: '📸 Simulation — Capture d\'écran sauvegardée → C:\\Users\\%USERNAME%\\Pictures\\Screenshots\\capture_' + new Date().toISOString().slice(0,10) + '.png' },
     'screenrec': { type: 'result', text: '🎬 Enregistrement écran — Prêt. Tapez "rec start" pour commencer (H.264, 60fps).' },
     'ocr':     { type: 'result', text: '📝 OCR — Pointez vers une image ou zone d\'écran pour extraire le texte. Langues : FR, EN, ES, DE.' },
     'transcrire': { type: 'result', text: '🎤 Transcription Whisper — Formats supportés : MP3, WAV, M4A, MP4 — Langues : auto-détection.' },
