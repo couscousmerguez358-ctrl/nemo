@@ -756,7 +756,7 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
 .terminal__body::-webkit-scrollbar { width: 4px; }
 .terminal__body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-.terminal__line { padding: 3px 0; line-height: 1.6; }
+.terminal__line { padding: 3px 0; line-height: 1.6; white-space: pre-wrap; }
 .terminal__line--sys { color: var(--aqua); }
 .terminal__line--user { color: var(--text); }
 .terminal__line--user::before { content: '❯ '; color: var(--teal); }

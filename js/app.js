@@ -639,8 +639,20 @@
       if (match) {
         const text = typeof match.text === 'function' ? match.text() : match.text;
         setTimeout(() => addLine(text, match.type), 180);
+      } else if (window.nemoAPI) {
+        // Exécution réelle via Electron
+        addLine(`Exécution système : ${raw}...`, 'sys');
+        window.nemoAPI.runCommand(raw).then(res => {
+          if (res.error) {
+            addLine(`Erreur: ${res.error}\n${res.stderr || ''}`, 'error');
+          } else {
+            addLine(res.stdout || 'Commande exécutée sans retour.', 'result');
+          }
+        }).catch(err => {
+          addLine(`Erreur d'exécution: ${err}`, 'error');
+        });
       } else {
-        setTimeout(() => addLine(`Commande « ${raw} » non reconnue. Tapez "aide".`, 'error'), 180);
+        setTimeout(() => addLine(`Commande « ${raw} » non reconnue en mode web. Tapez "aide".`, 'error'), 180);
       }
     });
   }

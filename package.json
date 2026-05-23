@@ -1,0 +1,29 @@
+{
+  "name": "nemo",
+  "version": "1.0.0",
+  "description": "NEMO - Neuro-Enhanced Machine Operator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder -w"
+  },
+  "build": {
+    "appId": "com.nemo.assistant",
+    "productName": "NEMO",
+    "win": {
+      "target": "nsis",
+      "icon": "img/avatar.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "author": "Irrationnellement",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8"
+  }
+}
