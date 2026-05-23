@@ -451,12 +451,9 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
 }
 
 .nemo-big {
-  font-size: 1.8em;
+  font-size: 1.4em;
   font-weight: 900;
-  background: linear-gradient(135deg, #fff, var(--aqua-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--aqua);
   letter-spacing: 2px;
 }
 
