@@ -450,6 +450,16 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
   font-size: 0.9em;
 }
 
+.nemo-big {
+  font-size: 1.8em;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff, var(--aqua-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
 /* ── About ─────────────────────────────────────── */
 .about {
   padding: 80px 24px 100px;
