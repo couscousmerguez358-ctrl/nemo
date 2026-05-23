@@ -311,7 +311,7 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
 
 .hero__sub {
   font-size: 1.05rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.95);
   max-width: 560px;
   margin: 0 auto 36px;
   line-height: 1.7;
