@@ -38,8 +38,8 @@
   --sea-green:      #B0E0E6;
 
   --text:           #eaf5ff;
-  --text-secondary: #a4cde6;
-  --text-muted:     #6a9fc0;
+  --text-secondary: rgba(255, 255, 255, 0.9);
+  --text-muted:     rgba(255, 255, 255, 0.75);
 
   --font:           'Super Mindset', 'Inter', -apple-system, 'Segoe UI', sans-serif;
   --font-mono:      'JetBrains Mono', 'Cascadia Code', monospace;
