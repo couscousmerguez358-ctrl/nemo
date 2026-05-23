@@ -650,20 +650,30 @@
     });
   }
 
-  // ── Mobile burger ──────────────────────────────
-  function initBurger() {
-    const burger = document.getElementById('navBurger');
-    const links = document.getElementById('navLinks');
-    if (!burger || !links) return;
-    let open = false;
-    burger.addEventListener('click', () => {
-      open = !open;
-      if (open) {
-        links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:rgba(2,11,24,0.97);padding:20px 24px;gap:16px;border-bottom:1px solid rgba(56,189,248,0.08);';
-      } else {
-        links.removeAttribute('style');
+  // ── Glass Nav Active State ─────────────────────
+  function initGlassNav() {
+    const items = document.querySelectorAll('.glass-nav__item');
+    const sections = [];
+    items.forEach(item => {
+      const href = item.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const sec = document.getElementById(href.slice(1));
+        if (sec) sections.push({ el: sec, link: item });
       }
     });
+
+    function update() {
+      const scrollY = window.scrollY + window.innerHeight / 2;
+      let active = sections[0]?.link;
+      for (const s of sections) {
+        if (s.el.offsetTop <= scrollY) active = s.link;
+      }
+      items.forEach(i => i.classList.remove('glass-nav__item--active'));
+      if (active) active.classList.add('glass-nav__item--active');
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
   // ── Init ───────────────────────────────────────
@@ -675,7 +685,7 @@
     renderModes();
     tagRevealElements();
     initTerminal();
-    initBurger();
+    initGlassNav();
     requestAnimationFrame(() => requestAnimationFrame(initReveal));
   }
 
