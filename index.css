@@ -840,6 +840,7 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
   position: absolute;
   will-change: transform;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  opacity: 0.3;
 }
 
 .fish--right {
