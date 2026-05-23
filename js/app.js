@@ -579,13 +579,21 @@
       line.textContent = text;
       body.appendChild(line);
       body.scrollTop = body.scrollHeight;
+
+      if (type !== 'user' && window.speakLine) {
+        window.speakLine(text);
+      }
     }
 
     input.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
       const raw = input.value.trim();
+      if (!raw) return;
+      processCommand(raw);
+    });
+
+    function processCommand(raw) {
       const cmd = raw.toLowerCase();
-      if (!cmd) return;
       addLine(raw, 'user');
       input.value = '';
       if (cmd === 'clear') {
@@ -654,7 +662,65 @@
       } else {
         setTimeout(() => addLine(`Commande « ${raw} » non reconnue en mode web. Tapez "aide".`, 'error'), 180);
       }
-    });
+    }
+
+    // ── Voice System ──────────────────────────────
+    const micBtn = document.getElementById('micBtn');
+    if (micBtn && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'fr-FR';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      let isListening = false;
+
+      micBtn.addEventListener('click', () => {
+        if (isListening) {
+          recognition.stop();
+          return;
+        }
+        recognition.start();
+      });
+
+      recognition.addEventListener('start', () => {
+        isListening = true;
+        micBtn.classList.add('listening');
+        input.placeholder = 'NEMO écoute...';
+      });
+
+      recognition.addEventListener('end', () => {
+        isListening = false;
+        micBtn.classList.remove('listening');
+        input.placeholder = 'Tapez une commande…';
+      });
+
+      recognition.addEventListener('result', (e) => {
+        const transcript = e.results[0][0].transcript;
+        input.value = transcript;
+        processCommand(transcript);
+      });
+
+      recognition.addEventListener('error', (e) => {
+        addLine(`Erreur vocale : ${e.error}`, 'error');
+      });
+    }
+
+    // ── Text To Speech ────────────────────────────
+    window.speakLine = function(text) {
+      if (!('speechSynthesis' in window)) return;
+      // Nettoyer les emojis et caractères spéciaux pour la lecture
+      const cleanText = text.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[^\w\sàâäéèêëîïôöùûüç'.-]/gi, ' ').trim();
+      if (!cleanText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 1.05;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.cancel(); // Stop current speech
+      window.speechSynthesis.speak(utterance);
+    };
+
   }
 
   // ── Scroll Reveal ──────────────────────────────

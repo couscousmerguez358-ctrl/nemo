@@ -786,6 +786,36 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
 
 .terminal__input::placeholder { color: var(--text-muted); }
 
+.terminal__mic-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: transform 0.2s, filter 0.2s;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terminal__mic-btn:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+}
+
+.terminal__mic-btn.listening {
+  animation: pulse-mic 1.5s infinite;
+  filter: drop-shadow(0 0 8px var(--aqua));
+}
+
+@keyframes pulse-mic {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 /* ── Modes ─────────────────────────────────────── */
 .modes {
   padding: 80px 24px 100px;
