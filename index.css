@@ -3,6 +3,15 @@
    🌊 Sexy Blue Gradient Theme
    ═══════════════════════════════════════════════════ */
 
+/* ── Font: Super Mindset ──────────────────────── */
+@font-face {
+  font-family: 'Super Mindset';
+  src: url('fonts/SuperMindset.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Tokens ────────────────────────────────────── */
 :root {
   --bg:             #003366;
@@ -32,7 +41,7 @@
   --text-secondary: #a4cde6;
   --text-muted:     #6a9fc0;
 
-  --font:           'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font:           'Super Mindset', 'Inter', -apple-system, 'Segoe UI', sans-serif;
   --font-mono:      'JetBrains Mono', 'Cascadia Code', monospace;
 
   --radius:         12px;
