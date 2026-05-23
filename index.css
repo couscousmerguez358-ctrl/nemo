@@ -135,6 +135,25 @@ input { border: none; outline: none; background: none; font: inherit; color: inh
   height: 80px;
 }
 
+/* ── Brand Logo ────────────────────────────────── */
+.brand-logo {
+  position: fixed;
+  top: 20px;
+  left: 28px;
+  z-index: 1001;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.3s;
+}
+
+.brand-logo:hover {
+  opacity: 0.8;
+}
+
 /* ── Layout ────────────────────────────────────── */
 .wrap {
   max-width: 1140px;
