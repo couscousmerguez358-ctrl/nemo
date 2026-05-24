@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════
-   NEMO v2.0 — App Controller
-   🌊 Aquatic theme — Fish, coral, seaweed, bubbles
+   NEMO v2.0 — SaaS App Controller
+   🌑 Premium Dark Theme
    ═══════════════════════════════════════════════════ */
 
 (() => {
@@ -91,7 +91,6 @@
     'thème':   { type: 'result', text: '🎨 Thème Windows : Sombre — Accent : Bleu — Transparence : Activée' },
     'fond':    { type: 'result', text: '🖼️ Fond d\'écran : Bing quotidien (activé) — Dernier changement : ce matin.' },
     'écrans':  { type: 'result', text: '🖥️ 2 écrans connectés — Principal : ASUS VG27AQ (1440p) — Secondaire : Dell P2419H (1080p)' },
-    'nuit':    { type: 'result', text: '🌙 Éclairage nocturne : Programmé 22h→7h — Intensité : 45%' },
 
     // ── Catégorie : Applications ──────────────────
     'apps':    { type: 'result', text: 'Commandes apps : ouvrir, fermer, installer, désinstaller, liste, zombies, startup' },
@@ -132,7 +131,6 @@
 
     // ── Catégorie : Média ─────────────────────────
     'média':   { type: 'result', text: 'Commandes média : screenshot, screenrec, ocr, convertir, transcrire, photo' },
-    'screenshot': { type: 'result', text: '📸 Simulation — Capture d\'écran sauvegardée → C:\\Users\\%USERNAME%\\Pictures\\Screenshots\\capture_' + new Date().toISOString().slice(0,10) + '.png' },
     'screenrec': { type: 'result', text: '🎬 Enregistrement écran — Prêt. Tapez "rec start" pour commencer (H.264, 60fps).' },
     'ocr':     { type: 'result', text: '📝 OCR — Pointez vers une image ou zone d\'écran pour extraire le texte. Langues : FR, EN, ES, DE.' },
     'transcrire': { type: 'result', text: '🎤 Transcription Whisper — Formats supportés : MP3, WAV, M4A, MP4 — Langues : auto-détection.' },
@@ -211,328 +209,54 @@
     'ambiance': { type: 'result', text: '🌊 Ambiance sonore — Profils : Pluie, Océan, Forêt, Café, Espace, Feu de cheminée — Tapez "ambiance [nom]"' },
   };
 
-  // ── Fish SVGs ──────────────────────────────────
-  const FISH_TYPES = [
-    // Clownfish (Nemo!) — orange with white stripes
-    (size) => `<svg viewBox="0 0 80 40" width="${size}" height="${size/2}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="40" cy="20" rx="28" ry="14" fill="#ff6b2b"/>
-      <path d="M12 20 Q6 10 2 20 Q6 30 12 20Z" fill="#ff6b2b"/>
-      <path d="M66 8 Q72 2 68 10" fill="none" stroke="#ff6b2b" stroke-width="3"/>
-      <path d="M66 32 Q72 38 68 30" fill="none" stroke="#ff6b2b" stroke-width="3"/>
-      <ellipse cx="30" cy="20" rx="4" ry="14" fill="white" opacity="0.9"/>
-      <ellipse cx="48" cy="20" rx="3" ry="12" fill="white" opacity="0.9"/>
-      <circle cx="56" cy="16" r="4" fill="white"/>
-      <circle cx="57" cy="15.5" r="2" fill="#1a1a2e"/>
-      <ellipse cx="40" cy="7" rx="12" ry="4" fill="#ff6b2b"/>
-      <path d="M38 7 Q40 2 42 7" fill="#ff8c42"/>
-    </svg>`,
-    // Blue tang (Dory) — blue with yellow tail
-    (size) => `<svg viewBox="0 0 80 40" width="${size}" height="${size/2}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="40" cy="20" rx="28" ry="14" fill="#1e90ff"/>
-      <path d="M12 20 Q4 8 2 20 Q4 32 12 20Z" fill="#ffd700"/>
-      <path d="M14 20 Q12 12 10 20 Q12 28 14 20Z" fill="#1a1a2e" opacity="0.5"/>
-      <ellipse cx="40" cy="7" rx="14" ry="5" fill="#1e90ff"/>
-      <ellipse cx="40" cy="33" rx="12" ry="4" fill="#1e90ff"/>
-      <circle cx="58" cy="16" r="4.5" fill="white"/>
-      <circle cx="59" cy="15.5" r="2.2" fill="#1a1a2e"/>
-      <path d="M20 14 Q32 18 48 16" fill="none" stroke="#0a0a2e" stroke-width="2.5" opacity="0.4"/>
-    </svg>`,
-    // Tropical small fish — teal
-    (size) => `<svg viewBox="0 0 60 30" width="${size*0.7}" height="${size*0.35}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="30" cy="15" rx="20" ry="10" fill="#2dd4bf"/>
-      <path d="M10 15 Q4 6 2 15 Q4 24 10 15Z" fill="#2dd4bf"/>
-      <circle cx="42" cy="12" r="3" fill="white"/>
-      <circle cx="43" cy="11.5" r="1.5" fill="#1a1a2e"/>
-      <ellipse cx="30" cy="5" rx="10" ry="3" fill="#14b8a6"/>
-      <path d="M20 10 Q28 12 38 10" fill="none" stroke="#0d9488" stroke-width="1.5" opacity="0.5"/>
-    </svg>`,
-    // Small yellow fish
-    (size) => `<svg viewBox="0 0 50 28" width="${size*0.6}" height="${size*0.34}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="25" cy="14" rx="17" ry="9" fill="#fbbf24"/>
-      <path d="M8 14 Q3 6 1 14 Q3 22 8 14Z" fill="#f59e0b"/>
-      <circle cx="35" cy="11" r="2.8" fill="white"/>
-      <circle cx="36" cy="10.5" r="1.3" fill="#1a1a2e"/>
-      <ellipse cx="25" cy="5" rx="8" ry="3" fill="#fbbf24"/>
-      <path d="M18 10 Q24 12 32 10" fill="none" stroke="#d97706" stroke-width="1.2" opacity="0.4"/>
-    </svg>`,
-    // Purple angelfish
-    (size) => `<svg viewBox="0 0 60 50" width="${size*0.7}" height="${size*0.58}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="30" cy="25" rx="18" ry="16" fill="#a78bfa"/>
-      <path d="M12 25 Q5 15 3 25 Q5 35 12 25Z" fill="#8b5cf6"/>
-      <path d="M30 4 Q28 12 30 9" fill="none" stroke="#a78bfa" stroke-width="4" stroke-linecap="round"/>
-      <path d="M30 46 Q28 38 30 41" fill="none" stroke="#a78bfa" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="40" cy="21" r="3.5" fill="white"/>
-      <circle cx="41" cy="20.5" r="1.7" fill="#1a1a2e"/>
-      <path d="M20 20 Q28 23 38 20" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.35"/>
-      <path d="M20 28 Q28 31 38 28" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.25"/>
-    </svg>`,
-    // Axolotl-inspired little creature — cute translucent blue
-    (size) => `<svg viewBox="0 0 70 50" width="${size*0.8}" height="${size*0.57}" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="35" cy="28" rx="22" ry="14" fill="rgba(147,197,253,0.6)"/>
-      <ellipse cx="35" cy="28" rx="18" ry="11" fill="rgba(191,219,254,0.5)"/>
-      <circle cx="26" cy="24" r="3" fill="white"/>
-      <circle cx="25.5" cy="23.5" r="1.5" fill="#1e1e3a"/>
-      <circle cx="44" cy="24" r="3" fill="white"/>
-      <circle cx="43.5" cy="23.5" r="1.5" fill="#1e1e3a"/>
-      <path d="M33 30 Q35 32 37 30" fill="none" stroke="#c084fc" stroke-width="1" stroke-linecap="round"/>
-      <path d="M16 16 Q10 6 8 12 Q12 10 16 16Z" fill="rgba(196,167,255,0.5)"/>
-      <path d="M20 14 Q16 4 14 10 Q18 8 20 14Z" fill="rgba(196,167,255,0.4)"/>
-      <path d="M24 13 Q22 4 20 9 Q23 8 24 13Z" fill="rgba(196,167,255,0.3)"/>
-      <path d="M54 16 Q60 6 62 12 Q58 10 54 16Z" fill="rgba(196,167,255,0.5)"/>
-      <path d="M50 14 Q54 4 56 10 Q52 8 50 14Z" fill="rgba(196,167,255,0.4)"/>
-      <path d="M46 13 Q48 4 50 9 Q47 8 46 13Z" fill="rgba(196,167,255,0.3)"/>
-      <path d="M13 28 Q8 30 6 34 Q8 33 10 32" fill="none" stroke="rgba(147,197,253,0.4)" stroke-width="2" stroke-linecap="round"/>
-      <path d="M57 28 Q62 30 64 34 Q62 33 60 32" fill="none" stroke="rgba(147,197,253,0.4)" stroke-width="2" stroke-linecap="round"/>
-      <path d="M13 34 Q6 38 4 42" fill="none" stroke="rgba(147,197,253,0.3)" stroke-width="2" stroke-linecap="round"/>
-      <path d="M57 34 Q64 38 66 42" fill="none" stroke="rgba(147,197,253,0.3)" stroke-width="2" stroke-linecap="round"/>
-    </svg>`,
-  ];
-
-  // ── Seaweed SVG builder ────────────────────────
-  function makeSeaweed(height, color, opacity) {
-    const h = height;
-    const w = 18;
-    return `<svg class="seaweed" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="opacity:${opacity}">
-      <path d="M9 ${h} Q2 ${h*0.75} 12 ${h*0.6} Q4 ${h*0.45} 11 ${h*0.3} Q5 ${h*0.15} 9 0"
-        fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
-      <path d="M9 ${h*0.7} Q15 ${h*0.65} 14 ${h*0.55}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-      <path d="M10 ${h*0.4} Q3 ${h*0.35} 5 ${h*0.28}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-    </svg>`;
-  }
-
-  // ── Coral SVG builder ──────────────────────────
-  function makeCoral(type, color, size) {
-    const s = size;
-    if (type === 'staghorn') {
-      // Dense branching orange coral (Frediani style)
-      return `<svg class="coral" viewBox="0 0 120 130" width="${s}" height="${s*1.08}" xmlns="http://www.w3.org/2000/svg">
-        <!-- Main trunk -->
-        <path d="M60 130 L60 90 Q58 80 55 70" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
-        <path d="M60 130 L62 95 Q65 82 68 72" fill="none" stroke="${color}" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>
-        <!-- Left branches -->
-        <path d="M55 70 Q45 55 35 38 Q30 28 25 15" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
-        <path d="M35 38 Q28 32 20 22" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-        <path d="M45 55 Q38 48 30 45 Q22 42 15 35" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-        <path d="M30 45 Q25 38 22 28" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-        <path d="M55 70 Q48 65 40 62 Q32 60 25 55" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-        <path d="M40 62 Q35 55 32 45" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
-        <path d="M25 55 Q18 48 12 40" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <path d="M20 22 Q15 15 10 8" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <path d="M25 15 Q20 8 18 2" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <!-- Right branches -->
-        <path d="M68 72 Q78 55 85 40 Q90 30 95 18" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
-        <path d="M85 40 Q92 35 100 25" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-        <path d="M78 55 Q85 50 92 48 Q98 45 105 38" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
-        <path d="M92 48 Q96 42 98 32" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-        <path d="M68 72 Q76 68 82 65 Q90 62 98 58" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-        <path d="M82 65 Q88 58 90 48" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
-        <path d="M98 58 Q104 52 108 42" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <path d="M100 25 Q104 18 108 10" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <path d="M95 18 Q98 10 100 4" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <!-- Center branches -->
-        <path d="M58 78 Q56 60 52 45 Q50 35 48 22" fill="none" stroke="${color}" stroke-width="3.5" stroke-linecap="round" opacity="0.75"/>
-        <path d="M62 78 Q66 58 70 42 Q72 32 75 20" fill="none" stroke="${color}" stroke-width="3.5" stroke-linecap="round" opacity="0.75"/>
-        <path d="M52 45 Q46 38 42 28" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
-        <path d="M70 42 Q76 35 80 25" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
-        <path d="M48 22 Q45 14 42 6" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <path d="M75 20 Q78 12 80 5" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <!-- Bumps/texture dots -->
-        <circle cx="25" cy="15" r="2" fill="${color}" opacity="0.5"/>
-        <circle cx="15" cy="35" r="1.8" fill="${color}" opacity="0.45"/>
-        <circle cx="95" cy="18" r="2" fill="${color}" opacity="0.5"/>
-        <circle cx="105" cy="38" r="1.8" fill="${color}" opacity="0.45"/>
-        <circle cx="48" cy="22" r="1.5" fill="${color}" opacity="0.4"/>
-        <circle cx="75" cy="20" r="1.5" fill="${color}" opacity="0.4"/>
-        <circle cx="42" cy="6" r="1.5" fill="${color}" opacity="0.45"/>
-        <circle cx="80" cy="5" r="1.5" fill="${color}" opacity="0.45"/>
-        <circle cx="10" cy="8" r="1.5" fill="${color}" opacity="0.4"/>
-        <circle cx="108" cy="10" r="1.5" fill="${color}" opacity="0.4"/>
-      </svg>`;
-    }
-    if (type === 'brain') {
-      return `<svg class="coral" viewBox="0 0 60 40" width="${s}" height="${s*0.67}" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="30" cy="28" rx="28" ry="12" fill="${color}" opacity="0.7"/>
-        <ellipse cx="30" cy="22" rx="22" ry="16" fill="${color}" opacity="0.5"/>
-        <path d="M14 20 Q18 16 22 20 Q26 16 30 20 Q34 16 38 20 Q42 16 46 20" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.6"/>
-        <path d="M18 26 Q22 22 26 26 Q30 22 34 26 Q38 22 42 26" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.5"/>
-      </svg>`;
-    }
-    if (type === 'branch') {
-      return `<svg class="coral" viewBox="0 0 50 70" width="${s*0.7}" height="${s}" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 70 L25 40 Q25 35 20 28 Q18 22 15 12" fill="none" stroke="${color}" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
-        <path d="M25 45 Q28 38 32 30 Q34 24 35 15" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-        <path d="M25 55 Q20 50 18 42" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-        <path d="M25 50 Q30 45 33 40" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-        <circle cx="15" cy="12" r="3" fill="${color}" opacity="0.5"/>
-        <circle cx="35" cy="15" r="2.5" fill="${color}" opacity="0.4"/>
-        <circle cx="18" cy="42" r="2" fill="${color}" opacity="0.4"/>
-      </svg>`;
-    }
-    if (type === 'tube') {
-      return `<svg class="coral" viewBox="0 0 40 60" width="${s*0.57}" height="${s*0.86}" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 60 L10 25 Q10 18 12 15" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
-        <path d="M20 60 L20 18 Q20 10 22 6" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
-        <path d="M30 60 L30 22 Q30 15 28 10" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
-        <circle cx="12" cy="14" r="3" fill="${color}" opacity="0.5"/>
-        <circle cx="22" cy="5" r="3.5" fill="${color}" opacity="0.6"/>
-        <circle cx="28" cy="9" r="2.8" fill="${color}" opacity="0.4"/>
-      </svg>`;
-    }
-    // fan coral
-    return `<svg class="coral" viewBox="0 0 70 60" width="${s}" height="${s*0.86}" xmlns="http://www.w3.org/2000/svg">
-      <path d="M35 60 L35 40" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
-      <path d="M35 40 Q15 25 10 8" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-      <path d="M35 40 Q20 20 18 5" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M35 40 Q30 18 28 4" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M35 40 Q40 18 42 4" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M35 40 Q50 20 52 5" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-      <path d="M35 40 Q55 25 60 8" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-    </svg>`;
-  }
-
-  // ── Create ocean floor ─────────────────────────
-  function createOceanFloor() {
-    const floor = document.createElement('div');
-    floor.className = 'ocean-floor';
-    floor.setAttribute('aria-hidden', 'true');
-
-    // Seaweed
-    const seaweedData = [
-      { left: '3%',  h: 120, color: '#0d9488', opacity: 0.5, delay: 0 },
-      { left: '7%',  h: 90,  color: '#14b8a6', opacity: 0.4, delay: 0.5 },
-      { left: '12%', h: 140, color: '#0f766e', opacity: 0.45, delay: 1.2 },
-      { left: '18%', h: 80,  color: '#2dd4bf', opacity: 0.3, delay: 0.8 },
-      { left: '30%', h: 100, color: '#0d9488', opacity: 0.35, delay: 1.5 },
-      { left: '45%', h: 110, color: '#14b8a6', opacity: 0.4, delay: 0.3 },
-      { left: '55%', h: 70,  color: '#0f766e', opacity: 0.3, delay: 2.0 },
-      { left: '65%', h: 130, color: '#2dd4bf', opacity: 0.45, delay: 0.7 },
-      { left: '72%', h: 85,  color: '#0d9488', opacity: 0.35, delay: 1.8 },
-      { left: '80%', h: 105, color: '#14b8a6', opacity: 0.4, delay: 1.0 },
-      { left: '88%', h: 125, color: '#0f766e', opacity: 0.5, delay: 0.4 },
-      { left: '94%', h: 75,  color: '#2dd4bf', opacity: 0.35, delay: 1.3 },
-    ];
-
-    seaweedData.forEach(s => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'seaweed-wrapper';
-      wrapper.style.cssText = `left:${s.left}; animation-delay:${s.delay}s;`;
-      wrapper.innerHTML = makeSeaweed(s.h, s.color, s.opacity);
-      floor.appendChild(wrapper);
-    });
-
-    // Corals — including big orange staghorn corals
-    const coralData = [
-      { left: '2%',  type: 'staghorn', color: '#f97316', size: 100 },
-      { left: '10%', type: 'brain',    color: '#c084fc', size: 60 },
-      { left: '18%', type: 'tube',     color: '#f472b6', size: 55 },
-      { left: '26%', type: 'staghorn', color: '#fb923c', size: 85 },
-      { left: '35%', type: 'fan',      color: '#a78bfa', size: 60 },
-      { left: '42%', type: 'branch',   color: '#fb923c', size: 65 },
-      { left: '50%', type: 'staghorn', color: '#ea580c', size: 110 },
-      { left: '60%', type: 'brain',    color: '#f9a8d4', size: 50 },
-      { left: '67%', type: 'tube',     color: '#c084fc', size: 58 },
-      { left: '74%', type: 'staghorn', color: '#f97316', size: 95 },
-      { left: '82%', type: 'fan',      color: '#67e8f9', size: 55 },
-      { left: '90%', type: 'staghorn', color: '#fb923c', size: 80 },
-    ];
-
-    coralData.forEach(c => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'coral-wrapper';
-      wrapper.style.cssText = `left:${c.left};`;
-      wrapper.innerHTML = makeCoral(c.type, c.color, c.size);
-      floor.appendChild(wrapper);
-    });
-
-    document.body.appendChild(floor);
-  }
-
-  // ── Create swimming fish ───────────────────────
-  function createFish() {
-    const container = document.createElement('div');
-    container.className = 'fish-container';
-    container.setAttribute('aria-hidden', 'true');
-
-    const fishConfig = [
-      { type: 0, size: 110, y: '10%', dur: 18, delay: 0,   dir: 'right' },  // Big Nemo
-      { type: 0, size: 80,  y: '25%', dur: 22, delay: 5,   dir: 'left' },   // Nemo 2
-      { type: 1, size: 120, y: '32%', dur: 20, delay: 3,   dir: 'right' },  // Big Dory
-      { type: 2, size: 90,  y: '50%', dur: 15, delay: 8,   dir: 'left' },   // Teal fish
-      { type: 3, size: 70,  y: '16%', dur: 14, delay: 2,   dir: 'right' },  // Yellow fish
-      { type: 3, size: 60,  y: '20%', dur: 13, delay: 3,   dir: 'right' },  // Yellow fish 2
-      { type: 4, size: 100, y: '58%', dur: 25, delay: 6,   dir: 'left' },   // Angelfish
-      { type: 2, size: 75,  y: '44%', dur: 16, delay: 10,  dir: 'right' },  // Teal fish 2
-      { type: 5, size: 110, y: '68%', dur: 28, delay: 4,   dir: 'right' },  // Big Axolotl
-      { type: 1, size: 90,  y: '53%', dur: 23, delay: 12,  dir: 'left' },   // Dory 2
-      { type: 0, size: 95,  y: '75%', dur: 19, delay: 7,   dir: 'right' },  // Nemo 3
-      { type: 4, size: 85,  y: '38%', dur: 21, delay: 15,  dir: 'left' },   // Angelfish 2
-    ];
-
-    fishConfig.forEach(f => {
-      const fish = document.createElement('div');
-      fish.className = `fish fish--${f.dir}`;
-      fish.style.cssText = `
-        top: ${f.y};
-        animation-duration: ${f.dur}s;
-        animation-delay: ${f.delay}s;
-      `;
-      fish.innerHTML = FISH_TYPES[f.type](f.size);
-      container.appendChild(fish);
-    });
-
-    document.body.appendChild(container);
-  }
-
-  // ── Bubbles ────────────────────────────────────
-  function initBubbles() {
-    const canvas = document.getElementById('bubbles');
+  // ── Particles Background ──────────────────────
+  function initParticles() {
+    const canvas = document.getElementById('particles');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let bubbles = [];
+    let particles = [];
 
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
 
-    function createBubble() {
+    function createParticle() {
       return {
         x: Math.random() * canvas.width,
-        y: canvas.height + Math.random() * 100,
-        r: Math.random() * 3 + 1,
-        speed: Math.random() * 0.6 + 0.15,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: Math.random() * 0.015 + 0.005,
-        wobbleAmp: Math.random() * 20 + 5,
-        alpha: Math.random() * 0.2 + 0.05,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        speedX: (Math.random() - 0.5) * 0.15,
+        speedY: (Math.random() - 0.5) * 0.15,
+        alpha: Math.random() * 0.3 + 0.05,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.01 + 0.003,
       };
     }
 
     function init() {
       resize();
-      bubbles = Array.from({ length: 50 }, createBubble);
+      particles = Array.from({ length: 60 }, createParticle);
     }
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const b of bubbles) {
-        b.y -= b.speed;
-        b.wobble += b.wobbleSpeed;
-        const x = b.x + Math.sin(b.wobble) * b.wobbleAmp;
-        if (b.y < -20) {
-          b.y = canvas.height + 10;
-          b.x = Math.random() * canvas.width;
-        }
+      for (const p of particles) {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.pulse += p.pulseSpeed;
+
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.x > canvas.width + 10) p.x = -10;
+        if (p.y < -10) p.y = canvas.height + 10;
+        if (p.y > canvas.height + 10) p.y = -10;
+
+        const alpha = p.alpha * (0.7 + Math.sin(p.pulse) * 0.3);
+
         ctx.beginPath();
-        ctx.arc(x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 123, 255, ${b.alpha})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(167, 139, 250, ${alpha})`;
         ctx.fill();
-        if (b.r > 1.5) {
-          ctx.beginPath();
-          ctx.arc(x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.3, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${b.alpha * 0.5})`;
-          ctx.fill();
-        }
       }
       requestAnimationFrame(draw);
     }
@@ -540,6 +264,54 @@
     init();
     draw();
     window.addEventListener('resize', resize);
+  }
+
+  // ── Cursor Glow ───────────────────────────────
+  function initCursorGlow() {
+    const glow = document.getElementById('cursorGlow');
+    if (!glow || window.innerWidth < 768) return;
+
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+  }
+
+  // ── Animated Counters ─────────────────────────
+  function initCounters() {
+    const counters = document.querySelectorAll('.trust__num[data-count]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.count);
+        const isLatency = el.closest('.trust__item')?.querySelector('.trust__label')?.textContent.includes('latence');
+        const duration = 1800;
+        const start = performance.now();
+
+        function animate(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+          const current = Math.round(target * eased);
+
+          if (isLatency) {
+            el.textContent = `<${current}`;
+          } else {
+            el.textContent = current + '+';
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        }
+
+        requestAnimationFrame(animate);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(c => observer.observe(c));
   }
 
   // ── Render ─────────────────────────────────────
@@ -606,12 +378,11 @@
         addLine('📸 Capture pleine page en cours...', 'info');
         setTimeout(() => {
           if (typeof html2canvas !== 'undefined') {
-            // Scroll to top for full capture
             const prevScroll = window.scrollY;
             window.scrollTo(0, 0);
 
             html2canvas(document.body, {
-              backgroundColor: null,
+              backgroundColor: '#06060e',
               scale: 2,
               useCORS: true,
               logging: false,
@@ -622,7 +393,6 @@
               x: 0,
               y: 0,
             }).then(canvas => {
-              // Restore scroll position
               window.scrollTo(0, prevScroll);
 
               const now = new Date();
@@ -706,10 +476,12 @@
       });
     }
 
-    // ── Text To Speech ────────────────────────────
+    // ── Text To Speech & Settings ─────────────────
+    let selectedVoice = null;
+    let ttsEnabled = true;
+
     window.speakLine = function(text) {
-      if (!('speechSynthesis' in window)) return;
-      // Nettoyer les emojis et caractères spéciaux pour la lecture
+      if (!ttsEnabled || !('speechSynthesis' in window)) return;
       const cleanText = text.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[^\w\sàâäéèêëîïôöùûüç'.-]/gi, ' ').trim();
       if (!cleanText) return;
 
@@ -717,10 +489,107 @@
       utterance.lang = 'fr-FR';
       utterance.rate = 1.05;
       utterance.pitch = 1.0;
-      window.speechSynthesis.cancel(); // Stop current speech
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     };
 
+    // Settings Modal UI
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const ttsToggle = document.getElementById('ttsToggle');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const micList = document.getElementById('micList');
+
+    if (settingsBtn && settingsModal) {
+      settingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+        populateVoices();
+        populateMics();
+      });
+
+      closeSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('active'));
+      settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.remove('active');
+      });
+
+      ttsToggle.addEventListener('change', (e) => {
+        ttsEnabled = e.target.checked;
+        if (!ttsEnabled) window.speechSynthesis.cancel();
+      });
+
+      voiceSelect.addEventListener('change', (e) => {
+        const voices = window.speechSynthesis.getVoices();
+        selectedVoice = voices.find(v => v.name === e.target.value) || null;
+      });
+    }
+
+    function populateVoices() {
+      if (!('speechSynthesis' in window)) return;
+      let voices = window.speechSynthesis.getVoices();
+      if (!voices.length) {
+        window.speechSynthesis.onvoiceschanged = populateVoices;
+        return;
+      }
+
+      let frVoices = voices.filter(v => v.lang.startsWith('fr'));
+      if (!frVoices.length) frVoices = voices;
+
+      voiceSelect.innerHTML = '';
+      frVoices.forEach(voice => {
+        const option = document.createElement('option');
+        option.value = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      if (!selectedVoice) {
+        const female = frVoices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('hortense') || v.name.toLowerCase().includes('julie'));
+        if (female) {
+          selectedVoice = female;
+          voiceSelect.value = female.name;
+        } else {
+          selectedVoice = frVoices[0];
+        }
+      } else {
+        voiceSelect.value = selectedVoice.name;
+      }
+    }
+
+    async function populateMics() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        micList.innerHTML = '<li class="settings-list-item">Impossible de lister les micros.</li>';
+        return;
+      }
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const mics = devices.filter(d => d.kind === 'audioinput');
+
+        micList.innerHTML = '';
+        if (mics.length === 0) {
+          micList.innerHTML = '<li class="settings-list-item">Aucun microphone détecté.</li>';
+          return;
+        }
+
+        mics.forEach((mic, index) => {
+          const li = document.createElement('li');
+          li.className = 'settings-list-item';
+          const name = mic.label || `Microphone ${index + 1}`;
+          li.textContent = name;
+          if (mic.deviceId === 'default' || (index === 0 && !mics.some(m => m.deviceId === 'default'))) {
+            li.classList.add('settings-list-item--default');
+            li.textContent += ' (Actif)';
+          }
+          micList.appendChild(li);
+        });
+      } catch (err) {
+        micList.innerHTML = `<li class="settings-list-item">Permission refusée ou erreur.</li>`;
+      }
+    }
   }
 
   // ── Scroll Reveal ──────────────────────────────
@@ -729,55 +598,81 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   }
 
   function tagRevealElements() {
-    ['.feature-card', '.stat-card', '.trust__bar', '.about .section-desc', '.terminal'].forEach(sel => {
+    ['.feature-card', '.stat-card', '.about__grid', '.terminal', '.price-card'].forEach(sel => {
       document.querySelectorAll(sel).forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 60}ms`;
+        if (!el.classList.contains('reveal')) {
+          el.classList.add('reveal');
+          el.style.transitionDelay = `${i * 80}ms`;
+        }
       });
     });
   }
 
-  // ── Glass Nav Active State ─────────────────────
-  function initGlassNav() {
-    const items = document.querySelectorAll('.glass-nav__item');
-    const sections = [];
-    items.forEach(item => {
-      const href = item.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        const sec = document.getElementById(href.slice(1));
-        if (sec) sections.push({ el: sec, link: item });
+  // ── Navigation ─────────────────────────────────
+  function initNav() {
+    const nav = document.getElementById('siteNav');
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+
+    // Scroll state
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
       }
+    }, { passive: true });
+
+    // Mobile toggle
+    if (toggle && links) {
+      toggle.addEventListener('click', () => {
+        links.classList.toggle('open');
+      });
+
+      // Close on link click
+      links.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => links.classList.remove('open'));
+      });
+    }
+
+    // Active link tracking
+    const navAnchors = links ? links.querySelectorAll('a[href^="#"]') : [];
+    const sections = [];
+    navAnchors.forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      const sec = document.getElementById(id);
+      if (sec) sections.push({ el: sec, link: a });
     });
 
-    function update() {
-      const scrollY = window.scrollY + window.innerHeight / 2;
+    function updateActive() {
+      const scrollY = window.scrollY + window.innerHeight / 3;
       let active = sections[0]?.link;
       for (const s of sections) {
         if (s.el.offsetTop <= scrollY) active = s.link;
       }
-      items.forEach(i => i.classList.remove('glass-nav__item--active'));
-      if (active) active.classList.add('glass-nav__item--active');
+      navAnchors.forEach(a => a.classList.remove('active'));
+      if (active) active.classList.add('active');
     }
 
-    window.addEventListener('scroll', update, { passive: true });
-    update();
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
   }
 
   // ── Init ───────────────────────────────────────
   function init() {
-    initBubbles();
-    createFish();
-    createOceanFloor();
+    initParticles();
+    initCursorGlow();
+    initNav();
     renderModules();
     renderModes();
     tagRevealElements();
     initTerminal();
-    initGlassNav();
+    initCounters();
     requestAnimationFrame(() => requestAnimationFrame(initReveal));
   }
 
