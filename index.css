@@ -49,14 +49,14 @@
   --text-muted:     rgba(255, 255, 255, 0.45);
 
   /* Typography */
-  --font:           'Super Mindset', 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-heading:   'Playfair Display', serif;
   --font-body:      'Inter', -apple-system, 'Segoe UI', sans-serif;
   --font-mono:      'JetBrains Mono', 'Cascadia Code', monospace;
 
   /* Radius */
-  --radius:         12px;
-  --radius-lg:      18px;
-  --radius-xl:      24px;
+  --radius:         16px;
+  --radius-lg:      24px;
+  --radius-xl:      32px;
   --radius-full:    9999px;
 
   /* Motion */
@@ -85,6 +85,12 @@ body {
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 input { border: none; outline: none; background: none; font: inherit; color: inherit; }
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
 
 ::selection {
   background: var(--primary);
@@ -377,11 +383,11 @@ body::before {
 }
 
 .hero__title {
-  font-family: var(--font);
+  font-family: var(--font-heading);
   font-size: clamp(2.8rem, 7vw, 5rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.08;
-  letter-spacing: -2px;
+  letter-spacing: -0.02em;
   margin-bottom: 24px;
   animation: fadeInUp 0.8s var(--ease) 0.1s both;
 }
@@ -454,9 +460,9 @@ body::before {
 }
 
 .trust__num {
-  font-family: var(--font);
-  font-size: 2rem;
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 700;
   background: var(--gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -484,10 +490,10 @@ body::before {
 }
 
 .section-title {
-  font-family: var(--font);
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -1px;
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-align: center;
   margin-bottom: 16px;
   line-height: 1.15;
@@ -632,20 +638,22 @@ body::before {
 .features__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-  gap: 16px;
+  grid-auto-rows: minmax(280px, auto);
+  gap: 20px;
 }
 
 .feature-card {
-  padding: 36px 32px;
+  padding: 40px;
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xl);
   transition: all var(--duration) var(--ease);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-card::before {
@@ -660,9 +668,9 @@ body::before {
 
 .feature-card:hover {
   background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 24px var(--primary-glow);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--primary-dim);
 }
 
 .feature-card--highlight {
@@ -839,15 +847,15 @@ body::before {
 }
 
 .terminal {
-  background: rgba(10, 10, 24, 0.90);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
+  background: rgba(10, 10, 24, 0.85);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-xl);
   overflow: hidden;
   font-family: var(--font-mono);
-  font-size: 0.84rem;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.4), 0 0 40px var(--primary-glow);
+  font-size: 0.85rem;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px var(--primary-glow);
 }
 
 .terminal__bar {
