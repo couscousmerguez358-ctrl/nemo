@@ -13,6 +13,7 @@ import CodeEditor from "@/components/editor/CodeEditor";
 import OutputConsole from "@/components/editor/OutputConsole";
 import { SandboxAdapter } from "@/services/sandbox/SandboxAdapter";
 import { useAutoSave } from "@/hooks/useAutoSave";
+import { cn } from "@/lib/cn";
 
 // SHA-256 Native Web Cryptography utility helper
 const sha256 = async (message: string): Promise<string> => {
@@ -22,21 +23,27 @@ const sha256 = async (message: string): Promise<string> => {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 };
 
-export default function Lesson() {
-  const [activeTab, setActiveTab] = useState<"theory" | "code" | "output">("theory");
-  const [isLoading, setIsLoading] = useState(false);
-  const [consoleOutput, setConsoleOutput] = useState("");
-  const [consoleError, setConsoleError] = useState<string | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
+interface LessonData {
+  id: string;
+  title: string;
+  tech: string;
+  estimatedMinutes: number;
+  xpReward: number;
+  theoryMarkdown: string;
+  starterCode: string;
+  expectedHash: string;
+  language: string;
+  seedSql?: string;
+}
 
-  // Mock static lesson data (simulating Supabase lookup)
-  const lesson = {
+const LESSONS_DATA: Record<string, LessonData> = {
+  "react-state-zustand": {
     id: "react-state-zustand",
     title: "Zustand : La Gestion d'État Moderne",
-    tech: "JavaScript",
+    tech: "React",
     estimatedMinutes: 15,
     xpReward: 50,
+    language: "javascript",
     theoryMarkdown: `
 # Zustand ⚡
 Zustand est une bibliothèque de gestion d'état globale pour React qui se veut extrêmement simple, rapide et minimaliste. Contrairement à Redux, il n'y a pas besoin de boilerplate complexe (actions, reducers, dispatchers). Tout tourne autour d'un simple store en écriture directe.
@@ -46,7 +53,7 @@ Un store Zustand est créé à l'aide de la fonction \`create\`. Cette fonction 
 
 ### Défi du Jour :
 Créez une fonction de calcul nommée \`multiplier(a, b)\` qui multiplie deux arguments \`a\` et \`b\` et renvoie le résultat. 
-Votre script doit obligatoirement inclure un \`console.log(multiplier(3, 4))\` pour valider le test unitaire.
+Votre script doit obligatoirement inclure un \`console.log(multiplier(3, 4))\` pour valider le test unitaire (le résultat attendu est 12).
     `,
     starterCode: `// Écris ta fonction multiplier(a, b) ci-dessous :
 function multiplier(a, b) {
@@ -55,12 +62,117 @@ function multiplier(a, b) {
 
 // Validation : affiche la multiplication de 3 et 4 dans la console
 console.log(multiplier(3, 4));`,
-    // Hashed expected answer sha256("12" + "salt_learnow")
-    expectedHash: "ef131b79f046dc87f7bcfcfd89d4608c0fb2dc46e03c621867c4dfbbd87b328a",
+    expectedHash: "ba76c7804ab9d86b5058bebfb03b93e141ed4404562697504fac148769b0693a",
+  },
+  "js-fundamentals": {
+    id: "js-fundamentals",
+    title: "JavaScript Moderne : Les Fondations",
+    tech: "JavaScript",
+    estimatedMinutes: 10,
+    xpReward: 40,
+    language: "javascript",
+    theoryMarkdown: `
+# JavaScript Moderne 🚀
+Les méthodes d'itération modernes sur les tableaux (comme \`.map()\`, \`.filter()\`, \`.reduce()\`) permettent d'écrire un code propre, déclaratif et sans boucles impératives (\`for\`/\`while\`).
+
+## Utilisation de .map() :
+La méthode \`.map()\` crée un nouveau tableau avec les résultats de l'appel d'une fonction fournie sur chaque élément du tableau appelant.
+
+### Défi du Jour :
+Créez une fonction nommée \`doublerTableau(arr)\` qui prend un tableau de nombres, double chaque valeur en utilisant \`.map()\`, et retourne le nouveau tableau.
+Votre script doit inclure un \`console.log(doublerTableau([1, 2, 3]).join(","))\` pour imprimer la sortie attendue "2,4,6".
+    `,
+    starterCode: `// Écris ta fonction doublerTableau(arr) ci-dessous :
+function doublerTableau(arr) {
+  // Complète le code avec arr.map()
+}
+
+// Validation : affiche le résultat final joint par des virgules
+console.log(doublerTableau([1, 2, 3]).join(","));`,
+    expectedHash: "b7a5d3767588ec712a1db3fba7536010ff6fd09e01e5dd2e1d59ed49564c9920",
+  },
+  "python-basics": {
+    id: "python-basics",
+    title: "Introduction à Python & Algorithmes",
+    tech: "Python",
+    estimatedMinutes: 20,
+    xpReward: 60,
+    language: "python",
+    theoryMarkdown: `
+# Algorithmique en Python 🐍
+Python est le langage par excellence pour l'analyse de données et le prototypage rapide grâce à sa syntaxe concise et lisible.
+
+## Les Fonctions en Python :
+Une fonction est définie avec le mot-clé \`def\`, et le corps de la fonction est déterminé par l'indentation (généralement 4 espaces).
+
+### Défi du Jour :
+Créez une fonction nommée \`calculer_somme(n)\` qui prend un entier positif \`n\` et renvoie la somme de tous les nombres de 1 à \`n\` inclus (par exemple, pour \`5\` elle doit calculer \`1 + 2 + 3 + 4 + 5 = 15\`).
+Votre script doit inclure un \`print(calculer_somme(5))\` pour imprimer la valeur attendue.
+    `,
+    starterCode: `# Écris ta fonction calculer_somme(n) ci-dessous :
+def calculer_somme(n):
+    # Complète le code ici
+    pass
+
+# Validation : affiche le résultat pour n = 5
+print(calculer_somme(5))`,
+    expectedHash: "458111c8ead7bcb2ade01648aacf4b03e1da271b79f1f0a30ce876935f5b1be1",
+  },
+  "sql-select": {
+    id: "sql-select",
+    title: "SQL.js : Requêtes Relationnelles SQLite",
+    tech: "SQL",
+    estimatedMinutes: 12,
+    xpReward: 45,
+    language: "sql",
+    theoryMarkdown: `
+# Bases de données relationnelles SQL 🗄️
+Le SQL (Structured Query Language) permet de stocker, manipuler et interroger des données au sein de bases relationnelles comme SQLite.
+
+## Les Fonctions d'Agrégation :
+La fonction \`COUNT(*)\` permet de compter le nombre total de lignes correspondant à un critère défini par la clause \`WHERE\`.
+
+### Défi du Jour :
+Écrivez une requête SQL pour compter le nombre d'abonnés Premium actifs (\`is_premium = 1\`) dans la table \`profiles\`.
+Une table \`profiles\` a été pré-configurée avec 4 membres, dont 3 sont abonnés Premium (\`Marie\`, \`Julie\` et \`Alexandre\`).
+    `,
+    starterCode: `-- Écris ta requête SQL ci-dessous pour compter les profils premium (is_premium = 1) :
+SELECT `,
+    expectedHash: "b0f033844b8b5771f6e34e31ff58b93b4949561fca698d48af6295b764c7898a",
+    seedSql: `
+      CREATE TABLE profiles (id INTEGER PRIMARY KEY, name TEXT, is_premium INTEGER);
+      INSERT INTO profiles (name, is_premium) VALUES ('Marie', 1), ('Thomas', 0), ('Julie', 1), ('Alexandre', 1);
+    `,
+  },
+};
+
+interface PageProps {
+  params: {
+    lessonId: string;
   };
+}
+
+export default function Lesson({ params }: PageProps) {
+  const lessonId = params.lessonId;
+  const lesson = LESSONS_DATA[lessonId] || LESSONS_DATA["react-state-zustand"];
+
+  const [activeTab, setActiveTab] = useState<"theory" | "code" | "output">("theory");
+  const [isLoading, setIsLoading] = useState(false);
+  const [consoleOutput, setConsoleOutput] = useState("");
+  const [consoleError, setConsoleError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // Wire auto-save to IndexedDB via custom hook
   const { code, setCode, isSaving, lastSaved } = useAutoSave(lesson.id, lesson.starterCode);
+
+  // Synchronize reset or route changes
+  useEffect(() => {
+    setIsSuccess(false);
+    setShowConfetti(false);
+    setConsoleOutput("");
+    setConsoleError(null);
+  }, [lessonId]);
 
   const handleRunCode = async () => {
     setIsLoading(true);
@@ -70,7 +182,7 @@ console.log(multiplier(3, 4));`,
 
     try {
       // Execute code via Strategy Pattern Adapter
-      const result = await SandboxAdapter.execute(code, "js");
+      const result = await SandboxAdapter.execute(code, lesson.language, lesson.seedSql);
       setIsLoading(false);
 
       if (result.error) {
@@ -90,9 +202,8 @@ console.log(multiplier(3, 4));`,
       if (userHash === lesson.expectedHash) {
         setIsSuccess(true);
         setShowConfetti(true);
-        // Play success check sound or trigger XP in BDD
       } else {
-        setConsoleError("Presque ! Le résultat imprimé dans la console n'est pas celui attendu (12). Vérifie ta logique.");
+        setConsoleError(`Presque ! Le résultat imprimé dans la console (${userOutputClean}) n'est pas celui attendu. Vérifiez votre logique ou vos paramètres.`);
       }
     } catch (err: any) {
       setIsLoading(false);
@@ -116,7 +227,7 @@ console.log(multiplier(3, 4));`,
               <Badge variant="primary" className="text-[9px] uppercase tracking-widest font-black py-0 px-2">
                 Leçon active
               </Badge>
-              <Badge variant="cyan" outline className="text-[9px] uppercase tracking-widest font-black py-0 px-2">
+              <Badge variant="cyan" outline className="text-[9px] uppercase tracking-widest font-black py-0 px-2 animate-pulse-glow">
                 {lesson.tech}
               </Badge>
             </div>
@@ -133,7 +244,7 @@ console.log(multiplier(3, 4));`,
           ) : lastSaved ? (
             <span className="text-[10px] text-textMuted select-none">Sauvegardé localement</span>
           ) : null}
-          <div className="h-8 px-3.5 rounded-xl bg-accent-green/10 border border-accent-green/20 text-accent-green flex items-center gap-1.5 font-bold text-xs select-none">
+          <div className="h-8 px-3.5 rounded-xl bg-accent-green/10 border border-accent-green/20 text-accent-green flex items-center gap-1.5 font-bold text-xs select-none shadow-[0_0_12px_rgba(0,229,117,0.1)]">
             <Sparkles className="h-3.5 w-3.5" /> +{lesson.xpReward} XP
           </div>
         </div>
@@ -149,19 +260,9 @@ console.log(multiplier(3, 4));`,
                 <BookOpen className="h-4.5 w-4.5 text-primary" /> {lesson.title}
               </h2>
               <div className="h-px bg-border/40 w-full mb-2" />
-              <p>
-                <strong>Zustand ⚡</strong> est une bibliothèque de gestion d'état globale pour React qui se veut extrêmement simple, rapide et minimaliste.
-              </p>
-              <p>
-                Tout tourne autour d'un simple store en écriture directe créé à l'aide de la fonction <code className="bg-[#1a1a28] text-primary px-1.5 py-0.5 rounded font-mono text-[10px]">create</code>.
-              </p>
-              <h3 className="font-display font-bold text-sm text-foreground mt-4">Défi du Jour :</h3>
-              <p>
-                Créez une fonction de calcul nommée <code className="bg-[#1a1a28] text-accent-cyan px-1.5 py-0.5 rounded font-mono text-[10px]">multiplier(a, b)</code> qui multiplie deux arguments <code className="bg-[#1a1a28] text-textSecondary px-1.5 py-0.5 rounded font-mono text-[10px]">a</code> et <code className="bg-[#1a1a28] text-textSecondary px-1.5 py-0.5 rounded font-mono text-[10px]">b</code> et renvoie le résultat.
-              </p>
-              <p>
-                Votre script doit obligatoirement inclure un <code className="bg-[#1a1a28] text-accent-green px-1.5 py-0.5 rounded font-mono text-[10px]">console.log(multiplier(3, 4))</code> pour valider le test unitaire.
-              </p>
+              <div className="whitespace-pre-line text-xs">
+                {lesson.theoryMarkdown}
+              </div>
             </div>
           </Card>
         </div>
@@ -176,7 +277,7 @@ console.log(multiplier(3, 4));`,
               <Badge variant="cyan" outline className="text-[9px] uppercase tracking-wider">CodeMirror 6</Badge>
             </div>
             <div className="flex-1 p-2">
-              <CodeEditor value={code} onChange={setCode} language="javascript" className="h-full" />
+              <CodeEditor value={code} onChange={setCode} language={lesson.language} className="h-full" />
             </div>
             {/* Actions Button */}
             <div className="p-4 border-t border-border/80 bg-[#101016]/20 flex items-center justify-end gap-3 select-none">
@@ -193,7 +294,7 @@ console.log(multiplier(3, 4));`,
                 onClick={handleRunCode}
                 className="py-2.5 px-6 text-xs gap-2"
               >
-                <Play className="h-3.5 w-3.5 fill-white" /> Exécuter le code (Ctrl+Entrée)
+                <Play className="h-3.5 w-3.5 fill-white" /> Exécuter le code
               </Button>
             </div>
           </Card>
@@ -231,13 +332,13 @@ console.log(multiplier(3, 4));`,
         <div className="flex-1 flex flex-col min-h-[360px]">
           {activeTab === "theory" && (
             <Card variant="default" padding="lg" className="flex-1 text-left overflow-y-auto max-h-[400px]">
-              <div className="prose prose-invert max-w-none text-xs text-textSecondary flex flex-col gap-3">
+              <div className="prose prose-invert max-w-none text-xs text-textSecondary flex flex-col gap-3 select-text">
                 <h2 className="font-display font-black text-base text-foreground mb-2 flex items-center gap-2">
-                  <BookOpen className="h-4.5 w-4.5 text-primary" /> Zustand ⚡
+                  <BookOpen className="h-4.5 w-4.5 text-primary" /> {lesson.title}
                 </h2>
-                <p>Zustand est une gestion d'état globale ultra-rapide.</p>
-                <h3 className="font-display font-bold text-xs text-foreground mt-4">Défi du jour :</h3>
-                <p>Créez la fonction <code className="bg-[#1a1a28] text-accent-cyan px-1.5 py-0.5 rounded font-mono text-[10px]">multiplier(a, b)</code> et faites un <code className="bg-[#1a1a28] text-accent-green px-1.5 py-0.5 rounded font-mono text-[10px]">console.log(multiplier(3, 4))</code>.</p>
+                <div className="whitespace-pre-line text-xs">
+                  {lesson.theoryMarkdown}
+                </div>
               </div>
             </Card>
           )}
@@ -245,7 +346,7 @@ console.log(multiplier(3, 4));`,
           {activeTab === "code" && (
             <Card variant="default" padding="none" className="flex-1 flex flex-col">
               <div className="flex-1 p-2 min-h-[280px]">
-                <CodeEditor value={code} onChange={setCode} language="javascript" className="h-full" />
+                <CodeEditor value={code} onChange={setCode} language={lesson.language} className="h-full" />
               </div>
               <div className="p-4 border-t border-border/80 bg-[#101016]/20 flex items-center justify-end gap-3">
                 <Button variant="secondary" onClick={() => setCode(lesson.starterCode)} className="py-2.5 px-4 text-xs">
@@ -268,7 +369,7 @@ console.log(multiplier(3, 4));`,
 
       {/* Success Celebration Overlay modal */}
       {isSuccess && showConfetti && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fade-in">
           <Card variant="elevated" padding="lg" className="max-w-md w-full bg-[#101016] border border-primary/20 text-center relative overflow-hidden glow-green animate-pulse-glow">
             <div className="absolute top-[-50%] left-[-20%] w-[300px] h-[300px] bg-accent-green/10 rounded-full blur-[100px] pointer-events-none" />
             
@@ -279,11 +380,11 @@ console.log(multiplier(3, 4));`,
             <h2 className="font-display font-extrabold text-2xl text-foreground">
               Quête validée ! 🎉
             </h2>
-            <p className="text-xs text-textSecondary mt-2">
-              Excellent travail ! Votre code a compilé avec succès et s'est exécuté sans erreur dans la sandbox locale.
+            <p className="text-xs text-textSecondary mt-2 leading-relaxed">
+              Excellent travail ! Votre code a été validé et s'est exécuté sans erreur dans la sandbox locale sécurisée.
             </p>
 
-            <div className="my-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent-green/10 border border-accent-green/20 text-accent-green font-bold text-sm">
+            <div className="my-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent-green/10 border border-accent-green/20 text-accent-green font-bold text-sm shadow-[0_0_12px_rgba(0,229,117,0.15)]">
               <Sparkles className="h-4.5 w-4.5 animate-pulse" /> +{lesson.xpReward} XP Crédités !
             </div>
 
